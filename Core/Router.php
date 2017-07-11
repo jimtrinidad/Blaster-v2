@@ -23,9 +23,9 @@ class Router
 		$url_params		= explode( '/', substr( str_replace( $_SERVER[ 'SCRIPT_NAME' ], '', $_SERVER[ 'PHP_SELF' ] ), 1 ) );
 
 		$this->verb 		= strtolower($_SERVER['REQUEST_METHOD']);
-		$this->module		= isset($url_params[0]) && trim($url_params[0]) != '' ? $url_params[0] : false;
-		$this->controller	= isset($url_params[1]) && trim($url_params[1]) != '' ? $url_params[1] : false;
-		$this->action		= isset($url_params[2]) && trim($url_params[2]) != '' ? $url_params[2] : false;
+		$this->module		= isset($url_params[0]) && trim($url_params[0]) != '' ? ucfirst(strtolower($url_params[0])) : false;
+		$this->controller	= isset($url_params[1]) && trim($url_params[1]) != '' ? ucfirst(strtolower($url_params[1])) : false;
+		$this->action		= isset($url_params[2]) && trim($url_params[2]) != '' ? ucfirst(strtolower($url_params[2])) : false;
 
 		$request_data 		= array_merge($_GET, $_POST, $_FILES);
 

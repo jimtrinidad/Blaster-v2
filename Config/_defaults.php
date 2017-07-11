@@ -3,12 +3,12 @@
 $defaults = array(
 
 	// default module to load. set false if none
-	'module'		=> 'default',
+	'module'		=> 'User',
 
 	// default controller class
-	'controller'	=> 'main',
+	'controller'	=> 'Authenticate',
 
 	// default controller method
-	'action'		=> 'index'
+	'action'		=> 'Login'
 
 );

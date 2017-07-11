@@ -15,5 +15,7 @@ define('MODEL_DIR', 		APPLICATION_DIR . 'Models' . DS);
 define('TEMP_DIR', 			ROOT_DIR . DS . '_tmp' . DS);
 
 
+define('AUTHENTICATE', true);
+
 
 include_once '_defaults.php';
