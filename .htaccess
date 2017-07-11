@@ -1,6 +1,27 @@
-RewriteEngine On
-RewriteBase /
+<Files .htaccess>
+	order allow,deny
+	deny from all
+</Files>
 
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ index.php/$1 [L]
+<Files ~ "\.tpl">
+  Order allow,deny
+  Deny from all
+</Files>
+
+Options All -Indexes
+
+AddType application/vnd.ms-fontobject .eot
+AddType font/ttf .ttf
+AddType font/otf .otf
+AddType application/font-woff .woff
+AddType application/x-font-woff .woff
+
+RewriteEngine on
+RewriteCond %{SCRIPT_FILENAME} !-f
+RewriteCond %{SCRIPT_FILENAME} !-d
+RewriteRule ^(.*)$ index.php/$1
+
+php_value max_input_vars 100000
+php_value suhosin.get.max_vars 100000
+php_value suhosin.post.max_vars 100000
+php_value suhosin.request.max_vars 100000
