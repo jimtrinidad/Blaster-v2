@@ -3,6 +3,8 @@
 namespace Loki\Core;
 
 use Loki\Core;
+use Loki\Module;
+use Loki\Model;
 
 class Loki 
 {
@@ -26,18 +28,9 @@ class Loki
 
 		$module 		= $this->load_module();
 
-		if ($module) {
+		if ($module !== false) {
 
-			$controller 	= $module . DS . ($this->router->controller !== false ? $this->router->controller : $this->defaults->controller) . '.php';
-
-			if (file_exists($controller)) {
-
-			} else {
-				Core\Response::show(array(
-						'status'	=> false,
-						'message'	=> 'Controller not found.'
-					));
-			}
+			$className = $this->load_controller($module);
 
 		} else {
 			Core\Response::show(array(
@@ -64,7 +57,7 @@ class Loki
 					));
 			}
 		} 
-		else if ($this->defaults) {
+		else if ($this->defaults->module) {
 			if (is_dir(MODULE_DIR . $this->defaults->module)) {
 				return MODULE_DIR . $this->defaults->module;
 			} else {
@@ -81,11 +74,34 @@ class Loki
 	/**
 	* Load and initialize controller
 	*/
-	private function load_controller()
+	private function load_controller($module)
 	{
+
 		if ($this->router->controller) {
-			$controller_file = $this->get_module() . DS . $this->router->controller . '.php';
+			$controller = $this->router->controller;
+		} else if ($this->defaults->controller) {
+			$controller = $this->defaults->controller;
+		} else {
+			return false;
+		}
+
+		if ($controller) {
+
+			$controller_file = $module . DS . $this->router->controller . '.php';
 			if (file_exists($controller_file)) {
+
+				include_once $controller_file;
+
+				$className 	= 'Loki\Module\\' . $this->router->module . '\\' . $this->router->controller;
+
+				if (class_exists($className)) {
+					return $className;
+				} else {
+					Core\Response::show(array(
+							'status'	=>false,
+							'message'	=> 'Controller class not found.'
+						), true);
+				}
 
 			} else {
 				Core\Response::show(array(
@@ -93,7 +109,10 @@ class Loki
 						'message'	=> 'Controller file not found.'
 					));
 			}
+
 		}
+
+		return false;
 	}
 
 }

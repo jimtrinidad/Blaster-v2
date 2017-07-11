@@ -34,7 +34,8 @@ set_include_path( implode( PATH_SEPARATOR, array(
 $_classes = array(
 	'Loki',
 	'Router',
-	'Response'
+	'Response',
+	'Controller'
 );
 
 foreach($_classes as $class) {
