@@ -32,6 +32,15 @@ class Loki
 
 			$className = $this->load_controller($module);
 
+			if ($className !== false) {
+
+			} else {
+				Core\Response::show(array(
+						'status'	=> false,
+						'message'	=> 'Application controller required.'
+					));
+			}
+
 		} else {
 			Core\Response::show(array(
 					'status'	=> false,
