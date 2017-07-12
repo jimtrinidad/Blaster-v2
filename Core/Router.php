@@ -42,6 +42,17 @@ class Router
 
 	}
 	
+	public function verb()
+	{
+		/**
+		* run verb through this,
+		* so we can redirect other verb to different function
+		*/
+		switch ($this->verb) {
+			default:
+				return $this->verb;
+		}
+	}
 
 	public function segment($index)
 	{

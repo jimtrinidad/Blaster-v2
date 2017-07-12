@@ -14,4 +14,13 @@ class Authenticate extends Controller
 	{
 		parent::__construct();
 	}
+
+	public function getLogin() {
+		echo 'get login';
+	}
+
+	public function postLogin() {
+		echo 'post login';
+	}
+
 }

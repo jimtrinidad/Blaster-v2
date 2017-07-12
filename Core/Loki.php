@@ -9,8 +9,10 @@ use Loki\Model;
 class Loki 
 {
 	
-	public $router;
 	public $defaults;
+	
+	public $router;
+	public $loader;
 
 	public function __construct() 
 	{
@@ -23,6 +25,7 @@ class Loki
 	*/
 	public function run()
 	{
+
 		//excute request routing
 		$this->router = new Core\Router;
 
@@ -33,6 +36,9 @@ class Loki
 			$className = $this->load_controller($module);
 
 			if ($className !== false) {
+
+				$controller = new $className();
+				$this->call_function($controller);
 
 			} else {
 				Core\Response::show(array(
@@ -56,23 +62,22 @@ class Loki
 	*/
 	private function load_module()
 	{
+
 		if ($this->router->module) {
+			$module = $this->router->module;
+		} else if ($this->defaults->module) {
+			$module = $this->defaults->module;
+		} else {
+			return false;
+		}
+
+		if ($module !== false) {
 			if (is_dir(MODULE_DIR . $this->router->module)) {
 				return MODULE_DIR . $this->router->module;
 			} else {
 				Core\Response::show(array(
 						'status'	=> false,
 						'message'	=> 'Module not found.'
-					));
-			}
-		} 
-		else if ($this->defaults->module) {
-			if (is_dir(MODULE_DIR . $this->defaults->module)) {
-				return MODULE_DIR . $this->defaults->module;
-			} else {
-				Core\Response::show(array(
-						'status'	=> false,
-						'message'	=> 'Default module not found.'
 					));
 			}
 		}
@@ -94,7 +99,7 @@ class Loki
 			return false;
 		}
 
-		if ($controller) {
+		if ($controller !== false) {
 
 			$controller_file = $module . DS . $this->router->controller . '.php';
 			if (file_exists($controller_file)) {
@@ -122,6 +127,42 @@ class Loki
 		}
 
 		return false;
+	}
+
+	/**
+	* Call controller function
+	*/
+	private function call_function($controller)
+	{
+		
+		if ($this->router->action) {
+			$action = $this->router->action;
+		} else if ($this->defaults->action) {
+			$action = $this->defaults->action;
+		} else {
+			return false; 
+		}
+
+		if ($action !== false) {
+
+			// prefix verb call
+			$functionName = $this->router->verb() . $action;
+			if (method_exists($controller, $functionName)) {
+				call_user_func(array($controller, $functionName));
+			} else {
+				Core\Response::show(array(
+						'status'	=> false,
+						'message'	=> 'Controller function not found.'
+					));
+			}
+
+		} else {
+			Core\Response::show(array(
+					'status'	=> false,
+					'message'	=> 'Controller function required.'
+				));
+		}
+
 	}
 
 }

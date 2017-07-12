@@ -26,8 +26,7 @@ switch (ENVIRONMENT)
 */ 
 set_include_path( implode( PATH_SEPARATOR, array(
 	get_include_path(),
-	SYSTEM_DIR,
-	APPLICATION_DIR
+	SYSTEM_DIR
 )));
 
 
@@ -35,7 +34,9 @@ $_classes = array(
 	'Loki',
 	'Router',
 	'Response',
-	'Controller'
+	'Loader',
+	'Controller',
+	'Model'
 );
 
 foreach($_classes as $class) {
