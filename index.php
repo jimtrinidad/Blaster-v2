@@ -3,15 +3,15 @@ include_once 'Config/_config.php';
 
 use Loki\Core;
 
-switch (ENVIRONMENT)
+switch (SYSTEM_ENV)
 {
-	case 'development':
+	case 'dev':
 		error_reporting(E_ALL);
 		ini_set('display_errors', true);
 		define( 'DB_DEBUG', TRUE );
 	break;
 
-	case 'production':
+	case 'prod':
 		error_reporting(E_ALL);
 	    ini_set('display_errors', false);
 	    ini_set('log_errors', 'On');

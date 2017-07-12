@@ -10,14 +10,16 @@ class Loki
 {
 	
 	public $defaults;
-	
+
 	public $router;
 	public $loader;
 
 	public function __construct() 
 	{
 		global $defaults;
+
 		$this->defaults = (object) $defaults;
+		$this->loader 	= new Core\Loader();
 	}
 
 	/**
@@ -72,8 +74,8 @@ class Loki
 		}
 
 		if ($module !== false) {
-			if (is_dir(MODULE_DIR . $this->router->module)) {
-				return MODULE_DIR . $this->router->module;
+			if (is_dir(MODULE_DIR . $module)) {
+				return $module;
 			} else {
 				Core\Response::show(array(
 						'status'	=> false,
@@ -101,12 +103,15 @@ class Loki
 
 		if ($controller !== false) {
 
-			$controller_file = $module . DS . $this->router->controller . '.php';
+			$controller_file = MODULE_DIR . $module . DS . $controller . '.php';
+
 			if (file_exists($controller_file)) {
 
 				include_once $controller_file;
 
-				$className 	= 'Loki\Module\\' . $this->router->module . '\\' . $this->router->controller;
+				$className 	= 'Loki\Module\\' . $module . '\\' . $controller;
+
+				echo $className;
 
 				if (class_exists($className)) {
 					return $className;

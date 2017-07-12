@@ -2,9 +2,11 @@
 
 namespace Loki\Core;
 
-class Response {
+class Response
+{
 
-	static public function show( $data, $kill = true ) {
+	public static function show( $data, $kill = true )
+	{
 
 		$debug = isset( $_GET['debug'] ) ? true : false;
 
@@ -22,6 +24,15 @@ class Response {
 
 		if( $kill === true ) {
 			die();
+		}
+	}
+
+	public static function logger($message)
+	{
+		if (SYSTEM_ENV == 'prod') {
+			syslog(LOG_INFO, date('Y-m-d H:i:s') . ' - ' . $message);
+		} else {
+			throw new Exception($message);
 		}
 	}
 
