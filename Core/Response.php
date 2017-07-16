@@ -32,7 +32,7 @@ class Response
 		if (SYSTEM_ENV == 'prod') {
 			syslog(LOG_INFO, date('Y-m-d H:i:s') . ' - ' . $message);
 		} else {
-			throw new Exception($message);
+			throw new \Exception($message);
 		}
 	}
 

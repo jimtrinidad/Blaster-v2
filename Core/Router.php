@@ -17,15 +17,27 @@ class Router
 	public $segments;
 	public $params;
 
-	public function __construct()
+	public function __construct($app)
 	{
 
 		$url_params		= explode( '/', substr( str_replace( $_SERVER[ 'SCRIPT_NAME' ], '', $_SERVER[ 'PHP_SELF' ] ), 1 ) );
 
 		$this->verb 		= strtolower($_SERVER['REQUEST_METHOD']);
-		$this->module		= isset($url_params[0]) && trim($url_params[0]) != '' ? ucfirst(strtolower($url_params[0])) : false;
-		$this->controller	= isset($url_params[1]) && trim($url_params[1]) != '' ? ucfirst(strtolower($url_params[1])) : false;
-		$this->action		= isset($url_params[2]) && trim($url_params[2]) != '' ? ucfirst(strtolower($url_params[2])) : false;
+
+		foreach(array('module','controller','action') as $k => $v) {
+
+			if (AUTHENTICATE && $app->auth->isGuest()) {
+				$this->{$v} = Utilities::format_name($app->defaults->auth[$v]);
+			} else {
+				if (isset($url_params[$k]) && trim($url_params[$k])) {
+					$this->{$v} = Utilities::format_name($url_params[$k]);
+				} else if ($app->defaults->{$v}) {
+					$this->{$v} = Utilities::format_name($app->defaults->{$v});
+				} else {
+					$this->{$v} = false;
+				}
+			}
+		}
 
 		$request_data 		= array_merge($_GET, $_POST, $_FILES);
 

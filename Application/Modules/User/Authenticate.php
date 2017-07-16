@@ -9,18 +9,15 @@ use Loki\Core\Controller;
 */
 class Authenticate extends Controller
 {
-	
-	private $auth;
 
 	function __construct()
 	{
 		parent::__construct();
-		$this->auth = $this->app->loader->model('auth');
 	}
 
 	public function getLogin() {
 		echo 'get login';
-		var_dump($this->auth);
+		var_dump($this->app->loader->defaults());
 	}
 
 	public function postLogin() {

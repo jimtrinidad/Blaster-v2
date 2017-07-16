@@ -96,4 +96,24 @@ class Loader
 		return false;
 
 	}
+
+	/**
+	* Get System defaults from Config/_defaults.php
+	*/
+	public function defaults($key = 'all')
+	{
+		global $system_defaults;
+		
+		if ($key == 'all') {
+			return $system_defaults;
+		}
+
+		if (isset($system_defaults[$key])) {
+			return $system_defaults[$key];
+		}
+
+		return false;
+
+	}
+
 }
