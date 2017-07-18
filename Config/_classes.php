@@ -1,43 +1,40 @@
 <?php
 
 /**
+* Class Mapping
+* Used for not well formated namespace.
+*/
+
+$class_mapping = array(
+		
+		'Core'				=> array(''),
+		'Model'				=> array('Application','Models'),
+		'Module'			=> array('Application','Modules'),
+
+		'Mysqli\DbManager'	=> 'mysqli_db.class'
+
+	);
+
+/**
 * Include class paths
 */ 
 set_include_path( implode( PATH_SEPARATOR, array(
 	get_include_path(),
 	SYSTEM_DIR,
 	VENDORS_DIR,
-	dirname(ROOT_DIR) . '/'
 )));
 
-// /**
-// * Core classes
-// */
-// $core_class = array(
-// 	'Loki',
-// 	'Router',
-// 	'Response',
-// 	'Loader',
-// 	'Controller',
-// 	'Model',
-// 	'Utilities',
-// 	'Auth'
-// );
+spl_autoload_register(function ($name) use ($class_mapping) {
 
-// /**
-// * Additional 3rd party classes
-// */
-// $third_parties	= array(
-// 	'MySQLi' => 'mysqli_db.class',
-// );
+	$tmp 	= explode('\\', $name);
+	if (isset($tmp[1]) && array_key_exists($tmp[1], $class_mapping) && is_array($class_mapping[$tmp[1]])) {
+		$name = ltrim(implode('/', $class_mapping[$tmp[1]]) . '/' . implode('/', array_slice($tmp, 2)), '/');
+	} else if (isset($class_mapping[$name])) {
+		$name = $class_mapping[$name];
+	} else {
+		$name = str_replace('\\', '/', $name);
+	}
 
+    include_once $name . '.php';
 
-// $_classes = array_merge($third_parties, $core_class);
-// foreach($_classes as $class) {
-// 	require_once $class . '.php';
-// }
-
-spl_autoload_register(function ($name) {
-    // var_dump(__NAMESPACE__, $name);
-    include str_replace('\\', '/', $name) . '.php';
 });

@@ -30,23 +30,14 @@ class Loader
 	*/
 	public function controller($module, $class)
 	{
-		$module 			= ucfirst(strtolower($module));
-		$class 				= ucfirst(strtolower($class));
+		$module 			= Utilities::format_name($module);
+		$class 				= Utilities::format_name($class);
 		$className 			= "\Loki\Module\\$module\\$class";
-		$controller_file	= MODULE_DIR . $module . DS . $class . '.php';
 
-		if (file_exists($controller_file)) {
-			
-			require_once $controller_file;
-
-			if (class_exists($className)) {
-				return new $className();
-			} else {
-				Core\Response::logger($className . ' -  controller class not found.');
-			}
-
+		if (class_exists($className)) {
+			return new $className();
 		} else {
-			Core\Response::logger($className . ' -  controller file not found.');
+			Core\Response::logger($className . ' -  controller class not found.');
 		}
 
 		return false;
@@ -57,24 +48,15 @@ class Loader
 	*/
 	public function model($class)
 	{
-		$class 			= ucfirst(strtolower($class));
+		$class 			= Utilities::format_name($class);
 		$className 		= "\Loki\Model\\$class";
-		$model_file		= MODEL_DIR . $class . '.php';
 
-		if (file_exists($model_file)) {
-			
-			require_once $model_file;
-
-			if (class_exists($className)) {
-				return new $className();
-			} else {
-				Core\Response::logger($className . ' -  model class not found.');
-			}
-			
+		if (class_exists($className)) {
+			return new $className();
 		} else {
-			Core\Response::logger($className . ' -  model file not found.');
+			Core\Response::logger($className . ' -  model class not found.');
 		}
-
+		
 		return false;
 	}
 

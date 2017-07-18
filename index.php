@@ -1,4 +1,5 @@
 <?php
+
 include_once 'Config/_config.php';
 
 use Loki\Core;

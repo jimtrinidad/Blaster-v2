@@ -17,6 +17,10 @@ class Authenticate extends Controller
 
 	public function getLogin() {
 		echo 'get login';
+		var_dump($this->app->loader->model('user'));
+		var_dump($this->app->loader->core('Response'));
+		var_dump($this->app->loader->controller('user','authenticate'));
+		var_dump($this->app->loader->config());
 		var_dump($this->app->loader->defaults());
 	}
 

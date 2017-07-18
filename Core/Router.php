@@ -40,12 +40,7 @@ class Router
 		}
 
 		$request_data 		= array_merge($_GET, $_POST, $_FILES);
-
-		foreach ($url_params as $k => $param) {
-			if ($k > 2) {
-				$this->segments[] = $param;
-			}
-		}
+		$this->segments 	= array_slice($url_params, 3);
 
 
 		foreach($request_data as $key => $value) {
