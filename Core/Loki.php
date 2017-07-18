@@ -33,8 +33,6 @@ class Loki
 		//excute request routing
 		$this->router = new Router($this);
 
-		var_dump($this->router);
-
 		$module 		= $this->load_module();
 
 		if ($module !== false) {
@@ -94,8 +92,10 @@ class Loki
 
 			$controller_file = MODULE_DIR . $module . DS . $this->router->controller . '.php';
 
+			if (file_exists($controller_file)) {
+
 				$className 	= 'Loki\Module\\' . $module . '\\' . $this->router->controller;
-				echo $className;
+
 				if (class_exists($className)) {
 					return $className;
 				} else {
@@ -104,6 +104,13 @@ class Loki
 							'message'	=> 'Controller class not found.'
 						), true);
 				}
+
+			} else {
+				Response::show(array(
+						'status'	=> false,
+						'message'	=> 'Controller file not found.'
+					));
+			}
 
 		}
 
