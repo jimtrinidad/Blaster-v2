@@ -11,7 +11,10 @@ class Loki
 	
 	public $defaults;
 
-	public $router;
+	/**
+	* class instances holder
+	*/
+	public $request;
 	public $loader;
 	public $auth;
 
@@ -31,9 +34,9 @@ class Loki
 	{
 
 		//excute request routing
-		$this->router = new Router($this);
+		$this->request = new Request($this);
 
-		$module 		= $this->load_module();
+		$module = $this->load_module();
 
 		if ($module !== false) {
 
@@ -48,14 +51,14 @@ class Loki
 				Response::show(array(
 						'status'	=> false,
 						'message'	=> 'Application controller required.'
-					));
+					), 404);
 			}
 
 		} else {
 			Response::show(array(
 					'status'	=> false,
 					'message'	=> 'Application module required.'
-				));
+				), 404);
 		}
 
 	}
@@ -67,14 +70,14 @@ class Loki
 	private function load_module()
 	{
 
-		if ($this->router->module) {
-			if (is_dir(MODULE_DIR . $this->router->module)) {
-				return $this->router->module;
+		if ($this->request->module) {
+			if (is_dir(MODULE_DIR . $this->request->module)) {
+				return $this->request->module;
 			} else {
 				Response::show(array(
 						'status'	=> false,
 						'message'	=> 'Module not found.'
-					));
+					), 404);
 			}
 		}
 
@@ -88,13 +91,13 @@ class Loki
 	private function load_controller($module)
 	{
 
-		if ($this->router->controller) {
+		if ($this->request->controller) {
 
-			$controller_file = MODULE_DIR . $module . DS . $this->router->controller . '.php';
+			$controller_file = MODULE_DIR . $module . DS . $this->request->controller . '.php';
 
 			if (file_exists($controller_file)) {
 
-				$className 	= 'Loki\Module\\' . $module . '\\' . $this->router->controller;
+				$className 	= 'Loki\Module\\' . $module . '\\' . $this->request->controller;
 
 				if (class_exists($className)) {
 					return $className;
@@ -102,14 +105,14 @@ class Loki
 					Response::show(array(
 							'status'	=>false,
 							'message'	=> 'Controller class not found.'
-						), true);
+						), 404);
 				}
 
 			} else {
 				Response::show(array(
 						'status'	=> false,
 						'message'	=> 'Controller file not found.'
-					));
+					), 404);
 			}
 
 		}
@@ -124,21 +127,21 @@ class Loki
 	private function call_function($controller)
 	{
 		
-		if ($this->router->action) {
-			$action = $this->router->action;
+		if ($this->request->action) {
+			$action = $this->request->action;
 		} else {
 			$action = 'Index'; 
 		}
 
 		// prefix verb call
-		$functionName = $this->router->verb() . $action;
+		$functionName = $this->request->verb() . $action;
 		if (method_exists($controller, $functionName)) {
-			call_user_func(array($controller, $functionName));
+			call_user_func_array(array($controller, $functionName), $this->request->func_args);
 		} else {
 			Response::show(array(
 					'status'	=> false,
 					'message'	=> 'Controller function not found.'
-				));
+				), 404);
 		}
 
 	}

@@ -5,7 +5,7 @@ namespace Loki\Core;
 class Response
 {
 
-	public static function show( $data, $kill = true )
+	public static function show( $data, $code = 200, $kill = true )
 	{
 
 		$debug = isset( $_GET['debug'] ) ? true : false;
