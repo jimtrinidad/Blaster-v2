@@ -35,6 +35,6 @@ spl_autoload_register(function ($name) use ($class_mapping) {
 		$name = str_replace('\\', '/', $name);
 	}
 
-    include_once $name . '.php';
+    require_once $name . '.php';
 
 });
