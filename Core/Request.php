@@ -66,10 +66,15 @@ class Request
 		}
 	}
 
-	public function segment($index)
+	public function segment($index, $default = false)
 	{
 		$index = $index - 1;
-		return isset($this->segments[$index]) ? $this->segments[$index] : false;
+		return isset($this->segments[$index]) ? $this->segments[$index] : $default;
+	}
+
+	public function param($key, $default = false)
+	{
+		return isset($this->params[$key]) ? $this->params[$key] : $default;
 	}
 
 	private function isID($k, $params)

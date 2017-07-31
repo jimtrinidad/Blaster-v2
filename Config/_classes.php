@@ -11,7 +11,13 @@ $class_mapping = array(
 		'Model'				=> array('Application','Models'),
 		'Module'			=> array('Application','Modules'),
 
-		'Mysqli\DbManager'	=> 'mysqli_db.class'
+		// PDO Wrapper
+		'Buki\Pdox'			=> 'PDO/Pdox',
+		'Buki\Cache'		=> 'PDO/Cache',
+
+
+		//Respect Validator
+		'Validation'		=> array('Validator')
 
 	);
 
@@ -26,6 +32,7 @@ set_include_path( implode( PATH_SEPARATOR, array(
 
 spl_autoload_register(function ($name) use ($class_mapping) {
 
+	// var_dump($name);
 	$tmp 	= explode('\\', $name);
 	if (isset($tmp[1]) && array_key_exists($tmp[1], $class_mapping) && is_array($class_mapping[$tmp[1]])) {
 		$name = ltrim(implode('/', $class_mapping[$tmp[1]]) . '/' . implode('/', array_slice($tmp, 2)), '/');

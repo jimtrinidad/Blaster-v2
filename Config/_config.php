@@ -40,9 +40,8 @@ $system_config = array(
 					'port'		=> '',
 					'user'		=> 'jim',
 					'pass'		=> '',
-					'dbname'	=> ''
-				),
-			'mongo' => array()
+					'dbname'	=> 'db_mailer'
+				)
 		)
 
 );

@@ -45,7 +45,14 @@ class Loki
 			if ($className !== false) {
 
 				$controller = new $className();
-				$this->call_function($controller);
+				$response = $this->call_function($controller);
+				if (is_array($response)) {
+					Response::show($response);
+				} else {
+					Response::show(array(
+							$response
+						));
+				}
 
 			} else {
 				Response::show(array(
@@ -136,7 +143,7 @@ class Loki
 		// prefix verb call
 		$functionName = $this->request->verb() . $action;
 		if (method_exists($controller, $functionName)) {
-			call_user_func_array(array($controller, $functionName), $this->request->func_args);
+			return call_user_func_array(array($controller, $functionName), $this->request->func_args);
 		} else {
 			Response::show(array(
 					'status'	=> false,
